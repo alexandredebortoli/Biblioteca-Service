@@ -2,6 +2,7 @@ package br.com.saks.emprestimoservice.controller;
 
 import br.com.saks.emprestimoservice.model.Emprestimo;
 import br.com.saks.emprestimoservice.repository.EmprestimoRepository;
+import br.com.saks.emprestimoservice.service.UsuarioService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,20 @@ public class EmprestimoController {
     @Autowired
     private EmprestimoRepository emprestimoRepository;
     
+    @Autowired
+    private UsuarioService usuarioService;
+    
     @GetMapping
     public List<Emprestimo> listarTodos() {
         return emprestimoRepository.findAll();
     }
     
     @GetMapping(value="/{id}")
-    public Optional<Emprestimo> listarPeloId(@PathVariable Long id) {
-        return emprestimoRepository.findById(id);
+    public Emprestimo listarPeloId(@PathVariable Long id) {
+        Optional<Emprestimo> emprestimoResponse = emprestimoRepository.findById(id);
+        Emprestimo emprestimo = emprestimoResponse.get();
+        emprestimo.setUsuario(usuarioService.listarPeloId(emprestimo.getIdUsuario()));
+        return emprestimo;
     }
     
     @PostMapping

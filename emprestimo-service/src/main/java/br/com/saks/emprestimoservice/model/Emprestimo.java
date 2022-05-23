@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 import lombok.Data;
 
 @Data
@@ -15,6 +16,9 @@ public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Transient
+    Usuario usuario;
     
     @Column(nullable = false, name = "id_usuario")
     private Long idUsuario;
